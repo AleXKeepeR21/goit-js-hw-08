@@ -1,5 +1,9 @@
+import { galleryItems } from './gallery-items';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 import { galleryItems } from './gallery-items.js';
-// Додатковий імпорт стилів
+// Change code below this line
 
 const galleryRef = document.querySelector('.gallery');
 
@@ -11,51 +15,36 @@ function createGalleryItemMarkup(galleryItems) {
     .map(({ preview, original, description }) => {
       return `
         <div class="gallery__item">
-          <a class="gallery__link" href="${original}">
-            <img
-              class="gallery__image"
-              src="${preview}"
-              data-source="${original}"
-              alt="${description}"
-            />
-          </a>
+            <a class="gallery__item" href="${original}">
+                <img class="gallery__image" 
+                src="${preview}" 
+                alt="${description}" />
+            </a>
         </div>
       `;
     })
     .join('');
 }
 
-galleryRef.addEventListener('click', onGalleryRefClick);
+new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
 
-let modalWindow;
-let onClickModalClose;
-
-function onGalleryRefClick(event) {
-  event.preventDefault();
-  const isGalleryRef = event.target.classList.contains('gallery__image');
-  if (!isGalleryRef) {
-    return;
-  }
-  console.log(event.target);
-  modalWindow = basicLightbox.create(
-    ` <img src="${event.target.dataset.source}" > `,
-    {
-      onShow: () => {
-        window.addEventListener('keydown', onEscapeClose);
-      },
-      onClose: () => {
-        window.removeEventListener('keydown', onEscapeClose);
-      },
-    }
-  );
-
-  modalWindow.show(onClickModalClose);
-
-  // window.addEventListener("keydown", onEscapeClose);
-}
-
-function onEscapeClose(event) {
-  if (event.key === 'Escape') {
-    modalWindow.close();
-  }
-}
+// const containerElementsGallery = document.querySelector('.gallery');
+// const imageMarkup = createItemOfGallery(galleryItems);
+// containerElementsGallery.insertAdjacentHTML('beforeend', imageMarkup);
+// function createItemOfGallery() {
+//   return galleryItems
+//     .map(({ preview, original, description }) => {
+//       return `<a class="gallery__item" href="${original}">
+//         <img class="gallery__image" src="${preview}" alt="${description}" />
+//       </a>`;
+//     })
+//     .join('');
+// }
+// let lightboxGallery = new SimpleLightbox('.gallery a', {
+//   captionsData: 'alt',
+//   captionDelay: 250,
+// });
